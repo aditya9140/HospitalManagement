@@ -1,0 +1,50 @@
+﻿@page "/addCustomer"
+@using WebApplication1.Data
+@inject CustomerService ObjCustomService
+@inject NavigationManager NavigationManager
+<h2>Create Customer</h2>
+<hr />
+<form>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="form-group">
+                <label for="Name" class="control-label">Name</label>
+                <input for="Name" class="form-control" @bind="@objCI.Name" />
+            </div>
+            <div class="form-group">
+                <label for="Email" class="control-label">Email</label>
+                <input for="Email" class="form-control" @bind="@objCI.Email" />
+            </div>
+
+            <div class="form-group">
+                <label for="Age" class="control-label">Age</label>
+                <input for="Age" class="form-control" @bind="@objCI.Age" />
+            </div>
+            <div class="form-group">
+                <label for="Salary" class="control-label">Salary</label>
+                <input for="Salary" class="form-control" @bind="@objCI.Salary" />
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" @onclick="@CreateCustomer" value="Save" />
+                <input type="button" class="btn btn-primary" @onclick="@Cancel" value="Cancel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+@code {
+    CustomerInfo objCI = new CustomerInfo();
+    protected void CreateCustomer()
+    {
+        ObjCustomService.Create(objCI);
+        NavigationManager.NavigateTo("customer");
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("customer");
+    }
+}   

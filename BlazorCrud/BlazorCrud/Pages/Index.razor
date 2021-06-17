@@ -1,0 +1,125 @@
+﻿@page "/"
+@using BlazorCrud.Data;
+@inject BlazorCrud.IRepository.IItemRepository itemRepository;
+
+
+
+<h1>EF Core Blazor Example</h1>
+
+
+
+<input type="text" @bind-value="@employee.Name" />
+<br />
+<br />
+<input type="text" @bind-value="@employee.City" />
+<br />
+<br />
+<input type="text" @bind-value="@employee.Country" />
+<br />
+<br />
+<input type="text" @bind-value="@employee.Age" />
+<br />
+<br />
+
+
+
+<button class="btn btn-success" @onclick="@(e=>SaveItem())">Save</button>
+
+<br />
+<br />
+
+<table class="table table-striped table-bordered">
+
+
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>City</th>
+            <th>Country</th>
+            <th>Age</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (Employee item in Employees)
+        {
+            <tr>
+
+                <td>@item.Name</td>
+                <td>@item.City</td>
+                <td>@item.Country</td>
+                <td>@item.Age</td>
+                <td>
+                    <button class="=btn btn-primary" @onclick="@(e=>SetItemValue(@item))">Edit</button>
+                    <button class="=btn btn-danger" @onclick="@(e=>DeleteItem(@item.EmployeeId))">Delete</button>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+
+
+
+
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+@code{
+
+    Employee employee = new Employee();
+    List<Employee> Employees = new List<Employee>();
+
+
+    protected override void OnInitialized()
+    {
+        LoadItems();
+    }
+
+
+
+    private void LoadItems()
+    {
+        Employees = new List<Employee>();
+        Employees = itemRepository.Gets();
+    }
+
+
+    private void GetItem(int itemId)
+    {
+        employee = itemRepository.Get(itemId);
+
+    }
+
+    private void DeleteItem(int itemId)
+    {
+
+        string message = itemRepository.Delete(itemId);
+    }
+
+
+
+    private void SaveItem()
+    {
+        if (employee.EmployeeId == 0) employee = itemRepository.Save(employee);
+        else employee = itemRepository.Update(employee);
+        employee = new Employee();
+        LoadItems();
+    }
+
+
+    private void SetItemValue(Employee item)
+    {
+        employee = item;
+    }
+}

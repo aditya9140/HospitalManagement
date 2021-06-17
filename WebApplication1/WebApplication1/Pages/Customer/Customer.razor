@@ -1,0 +1,61 @@
+﻿@page "/customer"
+@using WebApplication1.Data
+@inject CustomerService ObjCustomService
+
+<NavLink class="nav-link" href="AddCustomer">
+    <span class="oi oi-plus" aria-hidden="true"></span> Add New
+</NavLink>
+
+<h1>Customer Data</h1>
+@if (objCtmr == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Age</th>
+                <th>Salary</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var temp in objCtmr)
+            {
+                <tr>
+                    <td>@temp.Id</td>
+                    <td>@temp.Name</td>
+                    <td>@temp.Email</td>
+                    <td>@temp.Age</td>
+                    <td>@temp.Salary</td>
+                    <td>
+                        <a class="nav-link" href="EditCustomer/@temp.Id">
+                            <span class="oi oi-pencil" aria-hidden="true"></span> Edit
+                        </a>
+                        <a class="nav-link" href="DeleteCustomer/@temp.Id">
+                            <span class="oi oi-trash" aria-hidden="true"></span> Delete
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+
+    public CustomerInfo cust = new CustomerInfo();
+    public List<CustomerInfo> objCtmr;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        objCtmr = await Task.Run(() => ObjCustomService.GetCustomer());
+    }
+}
+
+
